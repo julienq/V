@@ -1,0 +1,78 @@
+* SVG
+  + vs. HTML vs. Canvas vs. WebGL
+  + vs. Processing
+  + vs. Flash
+
+* Markup
+  + SVG by itself
+  + SVG with HTML5 (notes about XHTML)
+
+* Javascript
+  + Our Javascript
+    - from scratch
+    - equality
+    - objects and prototypes
+    - this, call, apply, and bind
+    - DOM
+  + Support Library
+    - Create elements
+    - Utilities (bind, format, arrays, URIs, events, request animation frame)
+    - Numbers and randomness
+  + Explore other languages/frameworks?
+    - e.g. jQuery, Coffescript, ClojureScript, elm?
+
+* Lines, shapes and paths; filling and stroking
+  + Line
+    - there is no point! use circle or rect
+  + Shapes
+    - rect
+    - circle, ellipse
+    - polyline, polygon
+    - path
+  + Custom shapes: polygons, stars, triangle strips
+
+* Filters
+
+* Symbols (use)
+
+* Tiles and maps
+  - Infinite grid
+  - HB language
+
+* Isometric view
+
+* Transforms
+  - Geometry
+  - Adding CSS 3D transforms (e.g., Memory cards)
+
+* Animation
+  - Declarative
+  - Scripted
+  - CSS
+
+* Interactivity
+  - Mouse
+  - Keyboard
+  - Touch
+
+* Audio and Video
+  - playing with video
+  - some audio stuff too?
+
+* Libraries
+  - Raphael
+  - D3
+  - Box2D
+
+* Randomness
+
+* Algorithms
+  - kd tree
+  - convex hull -> US map
+  - treemap?
+  - sorting visualization
+  - self-intersecting path
+  - variable-width path
+  - &c.
+
+* Turtle graphics/Logo

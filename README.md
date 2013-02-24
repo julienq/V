@@ -1,4 +1,4 @@
-vectors-galore
-==============
+Vectors Galore!
+===============
 
-Vectors Galore! A book about Web vector graphics with SVG, HTML5 and Javascript
+A book about Web vector graphics with SVG, HTML5 and Javascript.
