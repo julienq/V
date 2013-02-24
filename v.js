@@ -101,7 +101,7 @@
       window.document.documentElement.namespaceURI;
     var elem = window.document
       .createElementNS(ns, m[1] ? name.substr(m[0].length) : name);
-    for (attr in attrs) {
+    for (var a in attrs) {
       if (attrs[a] != null && attrs[a] !== false) {
         var sp = a.split(":");
         ns = sp[1] && v.ns[sp[0].toLowerCase()];
@@ -119,6 +119,65 @@
     return elem;
   };
 
-  
+  v.deg2rad = function (d) {
+    return d / 180 * Math.PI;
+  };
+
+  v.$strip = function (attrs) {
+    var points = (attrs.points || "").split(/\s*,\s*|\s+/);
+    delete attrs.points;
+    var g = v.create_element("g", attrs, arguments);
+    for (var i = 0, n = points.length / 2 - 2; i < n; ++i) {
+      g.appendChild(v.create_element("polygon", { points:
+        [points[2 * i], points[2 * i + 1],
+         points[2 * i + 2], points[2 * i + 3],
+         points[2 * i + 4], points[2 * i + 5],
+         points[2 * i], points[2 * i + 1]
+        ].join(" ")
+      }));
+    }
+    return g;
+  };
+
+  A.forEach.call(document.querySelectorAll("strip"), function (strip) {
+    var attrs = {};
+    A.forEach.call(strip.attributes, function (a) {
+      attrs[a.localName] = a.value;
+    });
+    strip.parentElement.replaceChild(v.$strip(attrs,
+        A.slice.call(strip.childNodes)), strip);
+  });
+
+  // Create a regular polygon with the `sides` sides (should be at least 3),
+  // inscribed in a circle of radius `r`, with an optional starting phase
+  // (in degrees)
+  v.$poly = function (attrs) {
+    var sides = parseFloat(attrs.sides) || 0;
+    var radius = parseFloat(attrs.r) || 0;
+    var phase = v.deg2rad(parseFloat(attrs.phase || 0));
+    var x = parseFloat(attrs.x) || 0;
+    var y = parseFloat(attrs.y) || 0;
+    delete attrs.sides;
+    delete attrs.r;
+    delete attrs.phase;
+    delete attrs.x;
+    delete attrs.y;
+    var points = [];
+    for (var i = 0, ph = 2 * Math.PI / sides; i < sides; ++i) {
+      points.push(x + radius * Math.cos(phase + ph * i));
+      points.push(y - radius * Math.sin(phase + ph * i));
+    }
+    attrs.points = points.join(" ");
+    return v.create_element("svg:polygon", attrs, arguments);
+  };
+
+  A.forEach.call(document.querySelectorAll("poly"), function (poly) {
+    var attrs = {};
+    A.forEach.call(poly.attributes, function (a) {
+      attrs[a.localName] = a.value;
+    });
+    poly.parentElement.replaceChild(v.$poly(attrs,
+        A.slice.call(poly.childNodes)), poly);
+  });
 
 }.call(this));
