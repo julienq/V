@@ -20,6 +20,31 @@
   // classic A.slice.call(arguments, ...)
   var A = Array.prototype;
 
+  // Define a property named `name` on object `obj` with the custom setter `set`
+  v.make_property = function (obj, name, set, init) {
+    var value = init;
+    Object.defineProperty(obj, name, {
+      enumerable: true,
+      get: function () {
+        return value;
+      },
+      set: function (v) {
+        value = v;
+        set.call(this);
+      }
+    });
+  };
+
+  // Simple format function for messages and templates. Use %0, %1... as slots
+  // for parameters. %% is also replaced by %. Null and undefined are replaced
+  // by an empty string.
+  String.prototype.fmt = function () {
+    var args = arguments;
+    return this.replace(/%(\d+|%)/g, function (_, p) {
+      return p === "%" ? "%" : args[p] == null ? "" : args[p];
+    });
+  };
+
   // Known XML namespaces and their prefixes for use with create_element below.
   // XLink is used for href attributes with SVG elements. New namespace prefixes
   // can be added to this list and will be recognized by create_element. (For
@@ -174,6 +199,10 @@
   // use radians so we need to convert between the two.
   v.deg2rad = function (d) {
     return d / 180 * Math.PI;
+  };
+
+  v.rad2deg = function (r) {
+    return r / Math.PI * 180;
   };
 
   // Create a regular polygon with the `sides` sides (should be at least 3),
