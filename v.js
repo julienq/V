@@ -1,9 +1,10 @@
 // This is the Javascript library that we will use throughout the book.
 // Simply include it with:
-//   <script xlink:href="v.js"/>
+//   <script xlink:href="v.js" type="text/javascript"/>
 // in an SVG document, or
 //   <script src="v.js"></script>
-// in an HTML5 document.
+// in an HTML5 document. Do this at the end of the document if you have custom
+// elements (e.g. <poly> or <strip>) and want them replaced.
 
 (function () {
   "use strict";
@@ -119,34 +120,11 @@
     return elem;
   };
 
+  // SVG uses degrees for angle values, but Javascript trigonometric functions
+  // use radians so we need to convert between the two.
   v.deg2rad = function (d) {
     return d / 180 * Math.PI;
   };
-
-  v.$strip = function (attrs) {
-    var points = (attrs.points || "").split(/\s*,\s*|\s+/);
-    delete attrs.points;
-    var g = v.create_element("g", attrs, arguments);
-    for (var i = 0, n = points.length / 2 - 2; i < n; ++i) {
-      g.appendChild(v.create_element("polygon", { points:
-        [points[2 * i], points[2 * i + 1],
-         points[2 * i + 2], points[2 * i + 3],
-         points[2 * i + 4], points[2 * i + 5],
-         points[2 * i], points[2 * i + 1]
-        ].join(" ")
-      }));
-    }
-    return g;
-  };
-
-  A.forEach.call(document.querySelectorAll("strip"), function (strip) {
-    var attrs = {};
-    A.forEach.call(strip.attributes, function (a) {
-      attrs[a.localName] = a.value;
-    });
-    strip.parentElement.replaceChild(v.$strip(attrs,
-        A.slice.call(strip.childNodes)), strip);
-  });
 
   // Create a regular polygon with the `sides` sides (should be at least 3),
   // inscribed in a circle of radius `r`, with an optional starting phase
@@ -171,13 +149,90 @@
     return v.create_element("svg:polygon", attrs, arguments);
   };
 
-  A.forEach.call(document.querySelectorAll("poly"), function (poly) {
-    var attrs = {};
-    A.forEach.call(poly.attributes, function (a) {
-      attrs[a.localName] = a.value;
+  v.$star = function (attrs) {
+    var sides = parseFloat(attrs.sides) || 0;
+    var radius = parseFloat(attrs.r) || 0;
+    var phase = v.deg2rad(parseFloat(attrs.phase || 0));
+    var x = parseFloat(attrs.x) || 0;
+    var y = parseFloat(attrs.y) || 0;
+    delete attrs.sides;
+    delete attrs.r;
+    delete attrs.phase;
+    delete attrs.x;
+    delete attrs.y;
+    var points = [];
+    if (sides % 2 === 0) {
+      var g = v.create_element("svg:g", attrs);
+      for (var i = 0, ph = 4 * Math.PI / sides; i < sides; i += 2) {
+        points.push(x + radius * Math.cos(phase + ph * i));
+        points.push(y - radius * Math.sin(phase + ph * i));
+      }
+      points.push(points[0]);
+      points.push(points[1]);
+      g.appendChild(v.create_element("svg:polyline",
+            { points: points.join(" ") }));
+      for (points = [], i = 0.5; i < sides; i += 2) {
+        points.push(x + radius * Math.cos(phase + ph * i));
+        points.push(y - radius * Math.sin(phase + ph * i));
+      }
+      points.push(points[0]);
+      points.push(points[1]);
+      g.appendChild(v.create_element("svg:polyline",
+            { points: points.join(" ") }));
+      return g;
+    }
+    for (var i = 0, ph = 4 * Math.PI / sides; i < sides; ++i) {
+      points.push(x + radius * Math.cos(phase + ph * i));
+      points.push(y - radius * Math.sin(phase + ph * i));
+    }
+    points.push(points[0]);
+    points.push(points[1]);
+    attrs.points = points.join(" ");
+    return v.create_element("svg:polyline", attrs, arguments);
+  };
+
+  // Triangle strips. The list of points should be at least 6 long (i.e. 3 pairs
+  // of coordinates)
+  v.$strip = function (attrs) {
+    var points = (attrs.points || "").split(/\s*,\s*|\s+/);
+    delete attrs.points;
+    var g = v.create_element("g", attrs, arguments);
+    for (var i = 0, n = points.length / 2 - 2; i < n; ++i) {
+      g.appendChild(v.create_element("polygon", { points:
+        [points[2 * i], points[2 * i + 1],
+         points[2 * i + 2], points[2 * i + 3],
+         points[2 * i + 4], points[2 * i + 5],
+         points[2 * i], points[2 * i + 1]
+        ].join(" ")
+      }));
+    }
+    return g;
+  };
+
+  // Replace "fake" elements with their actual counterpart (e.g. strip, poly...)
+  function realize_element(name) {
+    A.forEach.call(document.querySelectorAll(name), function (elem) {
+      var attrs = {};
+      var ns_attrs = [];
+      A.forEach.call(elem.attributes, function (a) {
+        if (a.namespaceURI) {
+          ns_attrs.push(a);
+        } else {
+          attrs[a.localName] = a.value;
+        }
+      });
+      var e = elem.parentElement.replaceChild(
+        v["$" + name](attrs, elem.childNodes),
+        elem
+      );
+      ns_attrs.forEach(function (a) {
+        e.setAttributeNS(a.namespaceURI, a.localName, a.value);
+      });
+      return e;
     });
-    poly.parentElement.replaceChild(v.$poly(attrs,
-        A.slice.call(poly.childNodes)), poly);
-  });
+  }
+
+  // Realize all elements in the input document
+  ["poly", "star", "strip"].forEach(realize_element);
 
 }.call(this));
