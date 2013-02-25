@@ -221,7 +221,7 @@
           attrs[a.localName] = a.value;
         }
       });
-      var e = elem.parentElement.replaceChild(
+      var e = elem.parentNode.replaceChild(
         v["$" + name](attrs, elem.childNodes),
         elem
       );
