@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Test V</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="chai.js"></script>
+    <script src="mocha.js"></script>
+    <script>mocha.setup("bdd");</script>
+    <script>
+      // Set a global variable v to test saving
+      window.v = "v";
+    </script>
+    <script src="../v.js"></script>
+    <script src="v.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
+

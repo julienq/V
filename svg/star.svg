@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 400 300">
+  <title>Custom star element</title>
+  <star x="200" y="150" r="50" branches="5" phase="90"/>
+  <g stroke="black">
+    <star x="100" y="70" r="50" branches="6" fill="none" phase="90"/>
+    <star x="300" y="220" r="50" branches="8" fill="none"/>
+  </g>
+  <script xlink:href="../v.js" type="text/javascript"/>
+</svg>
+
