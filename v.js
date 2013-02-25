@@ -131,7 +131,7 @@
   // (in degrees)
   v.$poly = function (attrs) {
     var sides = parseFloat(attrs.sides) || 0;
-    var radius = parseFloat(attrs.r) || 0;
+    var r = parseFloat(attrs.r) || 0;
     var phase = v.deg2rad(parseFloat(attrs.phase || 0));
     var x = parseFloat(attrs.x) || 0;
     var y = parseFloat(attrs.y) || 0;
@@ -142,48 +142,38 @@
     delete attrs.y;
     var points = [];
     for (var i = 0, ph = 2 * Math.PI / sides; i < sides; ++i) {
-      points.push(x + radius * Math.cos(phase + ph * i));
-      points.push(y - radius * Math.sin(phase + ph * i));
+      points.push(x + r * Math.cos(phase + ph * i));
+      points.push(y - r * Math.sin(phase + ph * i));
     }
     attrs.points = points.join(" ");
     return v.create_element("svg:polygon", attrs, arguments);
   };
 
+  // Create a star with `branches` branches inscribed in a circle of radius `r`,
+  // with an optional starting phase (in degrees)
   v.$star = function (attrs) {
-    var sides = parseFloat(attrs.sides) || 0;
-    var radius = parseFloat(attrs.r) || 0;
-    var phase = v.deg2rad(parseFloat(attrs.phase || 0));
+    var branches = parseFloat(attrs.branches) || 0;
+    var r = parseFloat(attrs.r) || 0;
+    var phase = parseFloat(attrs.phase || 0);
     var x = parseFloat(attrs.x) || 0;
     var y = parseFloat(attrs.y) || 0;
-    delete attrs.sides;
+    delete attrs.branches;
     delete attrs.r;
     delete attrs.phase;
     delete attrs.x;
     delete attrs.y;
     var points = [];
-    if (sides % 2 === 0) {
-      var g = v.create_element("svg:g", attrs);
-      for (var i = 0, ph = 4 * Math.PI / sides; i < sides; i += 2) {
-        points.push(x + radius * Math.cos(phase + ph * i));
-        points.push(y - radius * Math.sin(phase + ph * i));
-      }
-      points.push(points[0]);
-      points.push(points[1]);
-      g.appendChild(v.create_element("svg:polyline",
-            { points: points.join(" ") }));
-      for (points = [], i = 0.5; i < sides; i += 2) {
-        points.push(x + radius * Math.cos(phase + ph * i));
-        points.push(y - radius * Math.sin(phase + ph * i));
-      }
-      points.push(points[0]);
-      points.push(points[1]);
-      g.appendChild(v.create_element("svg:polyline",
-            { points: points.join(" ") }));
-      return g;
+    if (branches % 2 === 0) {
+      var sides = branches / 2;
+      return v.create_element("svg:g", attrs,
+          v.$poly({ sides: sides, x: x, y: y, r: r, phase: phase }),
+          v.$poly({ sides: sides, x: x, y: y, r: r,
+            phase: phase + 360 / branches }));
     }
-    for (var i = 0, ph = 4 * Math.PI / sides; i < sides; ++i) {
-      points.push(x + radius * Math.cos(phase + ph * i));
-      points.push(y - radius * Math.sin(phase + ph * i));
+    phase = v.deg2rad(phase);
+    for (var i = 0, ph = 4 * Math.PI / branches; i < branches; ++i) {
+      points.push(x + r * Math.cos(phase + ph * i));
+      points.push(y - r * Math.sin(phase + ph * i));
     }
     points.push(points[0]);
     points.push(points[1]);
