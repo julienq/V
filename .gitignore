@@ -1,5 +1,5 @@
 *.swp
-node_modules
+.DS_Store
 test/chai.js
 test/mocha.css
 test/mocha.js

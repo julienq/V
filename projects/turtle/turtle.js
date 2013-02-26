@@ -6,7 +6,7 @@
   };
 
   turtle.new_path = function () {
-    this.__path = this.elem.parentNode.appendChild(v.$path({
+    this.__path = this.elem.parentNode.appendChild(V.$path({
       stroke: this.color, fill: "none", d: "M%0,%1".fmt(this.x, this.y)
     }));
   };
@@ -17,18 +17,18 @@
         this.__path.getAttribute("d") + "L%0,%1".fmt(this.x, this.y));
     }
     this.elem.setAttribute("transform", "translate(%0, %1) rotate(%2)"
-      .fmt(this.x, this.y, v.rad2deg(this.h)));
+      .fmt(this.x, this.y, V.rad2deg(this.h)));
   };
 
-  v.make_property(turtle, "color", function () {
+  V.make_property(turtle, "color", function () {
     if (this.__path) {
       this.new_path();
     }
   });
 
-  turtle.color = "white";
+  turtle.color = "black";
 
-  v.make_property(turtle, "visible", function () {
+  V.make_property(turtle, "visible", function () {
     this.elem.setAttribute("stroke-opacity", this.visible ? 1 : 0);
   });
 
@@ -45,7 +45,7 @@
   };
 
   this.RIGHT = function (degrees) {
-    turtle.h += v.deg2rad(degrees);
+    turtle.h += V.deg2rad(degrees);
     turtle.update_position();
   };
 
