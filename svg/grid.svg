@@ -6,7 +6,7 @@
   <strip fill="none" stroke="black" stroke-linejoin="round"
     points="50 150 100 50 150 120 200 80 250 200 300 180"/>
 
-  <script xlink:href="../v.js" type="text/javascript"/>
+  <script xlink:href="../V.js" type="text/javascript"/>
   <script type="text/javascript"><![CDATA[
 
 "use strict";
@@ -14,16 +14,16 @@
 var svg = document.documentElement;
 var bbox = svg.viewBox.baseVal;
 
-var grid = svg.insertBefore(v.$g({ stroke: "black", "stroke-opacity": 0.2,
+var grid = svg.insertBefore(V.$g({ stroke: "black", "stroke-opacity": 0.2,
   "stroke-width": 0.5 }), svg.firstChild);
 for (var x = 0; x <= bbox.width; x += 10) {
   var w = x % 100 === 0 ? 0.5 : undefined;
-  grid.appendChild(v.$line({ x1: x, x2: x, y1: 0, y2: bbox.height,
+  grid.appendChild(V.$line({ x1: x, x2: x, y1: 0, y2: bbox.height,
     "stroke-opacity": w }));
 }
 for (var y = 0; y <= bbox.height; y += 10) {
   var w = y % 100 === 0 ? 0.5 : undefined;
-  grid.appendChild(v.$line({ x1: 0, x2: bbox.width, y1: y, y2: y,
+  grid.appendChild(V.$line({ x1: 0, x2: bbox.width, y1: y, y2: y,
     "stroke-opacity": w }));
 }
 
