@@ -40,9 +40,8 @@ svg {
   <body>
     <div class="expand">
       <svg viewBox="-400 -250 800 500">
-        <g transform="rotate(-90)" stroke-linecap="round"
-          stroke-linejoin="round">
-          <polygon id="turtle" points="-4 4 8 0 -4 -4 -2 0"
+        <g stroke-linecap="round" stroke-linejoin="round">
+          <polygon id="turtle" points="4 4 0 -8 -4 4 0 2"
             fill="none"></polygon>
         </g>
       </svg>
@@ -90,18 +89,16 @@ function SLIDE(d) {
   PENDOWN();
 }
 
-function GARDEN(n) {
-  if (n === undefined) {
-    n = V.random_int(5, 10);
-  }
-  for (var i = 0; i < n; ++i) {
+function GARDEN() {
+  FOREVER(function () {
+    SETPENSIZE(V.random_int(1, 4));
     PENUP();
-    SETX(V.random_int(-400, 400));
-    SETY(V.random_int(-250, 250));
+    SETX(V.random_int(-200, 200));
+    SETY(V.random_int(-150, 150));
     PENDOWN();
-    // SETPENCOLOR(V.random_int(15));
+    SETPENCOLOR(V.random_int(15));
     PLANT(V.random_int(20, 200));
-  }
+  });
 }
 
     </script>

@@ -58,7 +58,7 @@
   turtle.new_path = function () {
     this.__path = this.sheet.appendChild(V.$path({ fill: "none",
       stroke: this.color, "stroke-width": this.pensize,
-      d: "M%0,%1".fmt(this.x, this.y)
+      d: "M%0,%1".fmt(this.x, -this.y)
     }));
     this.__points = [[this.x, this.y]];
   };
@@ -76,11 +76,11 @@
       if (this.x !== p[0] || this.y !== p[1]) {
         this.__points.push([this.x, this.y]);
         this.__path.setAttribute("d",
-          this.__path.getAttribute("d") + "L%0,%1".fmt(this.x, this.y));
+          this.__path.getAttribute("d") + "L%0,%1".fmt(this.x, -this.y));
       }
     }
     this.elem.setAttribute("transform", "translate(%0, %1) rotate(%2)"
-      .fmt(this.x, this.y, this.h));
+      .fmt(this.x, -this.y, this.h));
   };
 
   V.make_property(turtle, "color", function () {
@@ -123,7 +123,7 @@
 
   this.FORWARD = this.FD = function (steps) {
     turtle.exec(function () {
-      var r = V.deg2rad(this.h);
+      var r = V.deg2rad(90 - this.h);
       this.x += steps * Math.cos(r);
       this.y += steps * Math.sin(r);
       this.update_position();
@@ -200,15 +200,11 @@
   };
 
   this.SHOWTURTLE = this.ST = function () {
-    turtle.exec(function () {
-      this.visible = true;
-    });
+    turtle.visible = true;
   };
 
   this.HIDETURTLE = this.HT = function () {
-    turtle.exec(function () {
-      this.visible = false;
-    });
+    turtle.visible = false;
   };
 
   this.CLEAN = function () {
@@ -264,11 +260,18 @@
     });
   };
 
+  this.SETSPEED = function (speed) {
+    turtle.speed = speed;
+  };
+
+  this.SPEED = function () {
+    return turtle.speed;
+  }
 
   // Initialize the turtle
   turtle.commands = [];
-  turtle.speed = 16;
   turtle.new_sheet();
+  SETSPEED(24);
   HOME();
   SHOWTURTLE();
   SETBACKGROUND(0);
