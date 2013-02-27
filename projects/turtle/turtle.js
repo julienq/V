@@ -100,6 +100,11 @@
     this.elem.setAttribute("stroke-opacity", this.visible ? 1 : 0);
   });
 
+  V.make_property(turtle, "background", function () {
+    document.querySelector("svg").style.backgroundColor =
+      this.palette[this.background] || this.background;
+  });
+
 
   // LOGO-like commands
 
@@ -114,10 +119,10 @@
   };
 
   // Functions from UCB Logo
-  // TODO: ARC, TOWARDS, SCRUNCH, WRAP, WINDOW, FENCE, FILL, FILLED, LABEL,
+  // TODO: ARC, SCRUNCH, WRAP, WINDOW, FENCE, FILL, FILLED, LABEL,
   // SETLABELHEIGHT, SETSCRUNCH, TURTLEMODE, LABELSIZE, PENPAINT, PENERASE,
-  // SETPENPATTERN, PENDOWNP, PENMODE, PENCOLOR, PALETTE, PENSIZE, PENPATTERN,
-  // PEN, BACKGROUND, SAVEPICT, LOADPICT, MOUSEPOS, CLICKPOS, BUTTONP, BUTTON
+  // SETPENPATTERN, PENMODE, PENCOLOR, PALETTE, PENSIZE, PENPATTERN,
+  // PEN, SAVEPICT, LOADPICT, MOUSEPOS, CLICKPOS, BUTTONP, BUTTON
   // Ours:
   // FOLLOW, SCALE, TOUCH*, SHEET*, UNDO, REDO
 
@@ -199,6 +204,11 @@
     return (360 + turtle.h) % 360;
   };
 
+  this.TOWARDS = function (x, y) {
+    return V.rad2deg(3 * Math.PI / 2 - Math.atan2(turtle.y - y, turtle.x - x))
+      - turtle.h;
+  };
+
   this.SHOWTURTLE = this.ST = function () {
     turtle.visible = true;
   };
@@ -235,6 +245,10 @@
     });
   };
 
+  this.PENDOWNP = function () {
+    return !!turtle.__path;
+  };
+
   this.SETPENCOLOR = this.SETPC = function (color) {
     turtle.exec(function () {
       this.color = turtle.palette[color] || color;
@@ -255,9 +269,12 @@
 
   this.SETBACKGROUND = this.SETBG = function (color) {
     turtle.exec(function () {
-      document.querySelector("svg").style.backgroundColor =
-        this.palette[color] || color;
+      this.background = color;
     });
+  };
+
+  this.BACKGROUND = function (n) {
+    return turtle.background;
   };
 
   this.SETSPEED = function (speed) {
