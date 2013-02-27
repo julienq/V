@@ -20,6 +20,19 @@
   // classic A.slice.call(arguments, ...)
   var A = Array.prototype;
 
+
+  // Randomness
+
+  // Random integer in the [min, max] range, or [0, max] if min is not given.
+  // We asssume that min < max.
+  V.random_int = function (min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
   // Define a property named `name` on object `obj` with the custom setter `set`
   V.make_property = function (obj, name, set, init) {
     var value = init;
@@ -194,6 +207,13 @@
       return p.toUpperCase();
     })] = V.create_element.bind(window.document, "svg:" + tag);
   });
+
+  // Remove all children of a node
+  V.remove_children = function (node) {
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
+  };
 
   // SVG uses degrees for angle values, but Javascript trigonometric functions
   // use radians so we need to convert between the two.

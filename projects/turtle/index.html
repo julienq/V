@@ -7,6 +7,10 @@
     <style>
 
 html {
+  height: 100%;
+}
+
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -36,13 +40,70 @@ svg {
   <body>
     <div class="expand">
       <svg viewBox="-400 -250 800 500">
-        <g transform="rotate(-90)">
-          <polygon id="turtle" points="-12 8 12 0 -12 -8 -8 0"
-            fill="none" stroke="black"></polygon>
+        <g transform="rotate(-90)" stroke-linecap="round"
+          stroke-linejoin="round">
+          <polygon id="turtle" points="-8 8 16 0 -8 -8 -4 0"
+            fill="none"></polygon>
         </g>
       </svg>
     </div>
     <script src="../../V.js"></script>
     <script src="turtle.js"></script>
+
+    <script>
+
+// Garden
+
+function QCIRCLE(d) {
+  for (var i = 0; i < 90; ++i) {
+    FD(d / 90);
+    RT(1);
+  }
+}
+
+function PETAL(d) {
+  QCIRCLE(d);
+  RT(90);
+  QCIRCLE(d);
+  RT(90);
+}
+
+function FLOWER(d) {
+  for (var i = 0; i < 10; ++i) {
+    PETAL(d);
+    RT(36);
+  }
+}
+
+function PLANT(d) {
+  FLOWER(d / 2);
+  BACK(d);
+  PETAL(d / 2);
+  BACK(d / 2);
+}
+
+function SLIDE(d) {
+  PENUP();
+  RT(90);
+  FD(d);
+  LT(90);
+  PENDOWN();
+}
+
+function GARDEN(n) {
+  if (n === undefined) {
+    n = V.random_int(5, 10);
+  }
+  for (var i = 0; i < n; ++i) {
+    PENUP();
+    SETX(V.random_int(-400, 400));
+    SETY(V.random_int(-250, 250));
+    PENDOWN();
+    // SETPENCOLOR(V.random_int(15));
+    PLANT(V.random_int(20, 200));
+  }
+}
+
+    </script>
   </body>
 </html>
