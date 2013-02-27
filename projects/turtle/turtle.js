@@ -34,8 +34,10 @@
       if (this.commands.length > 0) {
         this.__req = window.requestAnimationFrame(exec_cmd);
       } else {
-        console.log("DONE");
         delete this.__req;
+        if (typeof this.done === "function") {
+          this.done.call(this);
+        }
       }
     }.bind(this);
     this.commands.push(f);
@@ -99,6 +101,18 @@
   });
 
 
+  // LOGO-like commands
+
+  this.FOREVER = function (f) {
+    turtle.done = f;
+    f();
+  };
+
+  this.STOP = function () {
+    turtle.stop();
+    delete turtle.done;
+  };
+
   // Functions from UCB Logo
   // TODO: ARC, TOWARDS, SCRUNCH, WRAP, WINDOW, FENCE, FILL, FILLED, LABEL,
   // SETLABELHEIGHT, SETSCRUNCH, TURTLEMODE, LABELSIZE, PENPAINT, PENERASE,
@@ -106,10 +120,6 @@
   // PEN, BACKGROUND, SAVEPICT, LOADPICT, MOUSEPOS, CLICKPOS, BUTTONP, BUTTON
   // Ours:
   // FOLLOW, SCALE, TOUCH*, SHEET*, UNDO, REDO
-
-  this.STOP = function () {
-    turtle.stop();
-  };
 
   this.FORWARD = this.FD = function (steps) {
     turtle.exec(function () {
