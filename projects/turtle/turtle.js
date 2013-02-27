@@ -20,7 +20,36 @@
       "#420943",  // 13: purple
       "#fbb829",  // 14: orange
       "#808080"   // 15: gray
-    ]
+    ],
+  };
+
+  turtle.exec = function (f) {
+    var exec_cmd = function() {
+      for (var i = 0; i < this.speed; ++i) {
+        var cmd = this.commands.shift();
+        if (cmd) {
+          cmd.call(this);
+        }
+      }
+      if (this.commands.length > 0) {
+        this.__req = window.requestAnimationFrame(exec_cmd);
+      } else {
+        console.log("DONE");
+        delete this.__req;
+      }
+    }.bind(this);
+    this.commands.push(f);
+    if (!this.__req) {
+      this.__req = window.requestAnimationFrame(exec_cmd);
+    }
+  };
+
+  turtle.stop = function (f) {
+    if (this.__req) {
+      window.cancelAnimationFrame(this.__req);
+      this.commands = [];
+      delete this.__req;
+    }
   };
 
   // Start a new path with the current color
@@ -34,7 +63,7 @@
 
   // Start a new sheet to draw on
   turtle.new_sheet = function () {
-    this.sheet = this.elem.parentNode.appendChild(V.$g());
+    this.sheet = this.elem.parentNode.insertBefore(V.$g(), this.elem);
   };
 
   // Update the position of the turtle; if the pen is down, keep drawing to the
@@ -78,11 +107,17 @@
   // Ours:
   // FOLLOW, SCALE, TOUCH*, SHEET*, UNDO, REDO
 
+  this.STOP = function () {
+    turtle.stop();
+  };
+
   this.FORWARD = this.FD = function (steps) {
-    var r = V.deg2rad(turtle.h);
-    turtle.x += steps * Math.cos(r);
-    turtle.y += steps * Math.sin(r);
-    turtle.update_position();
+    turtle.exec(function () {
+      var r = V.deg2rad(this.h);
+      this.x += steps * Math.cos(r);
+      this.y += steps * Math.sin(r);
+      this.update_position();
+    });
   };
 
   this.BACK = this.BK = function (steps) {
@@ -94,8 +129,10 @@
   };
 
   this.RIGHT = this.RT = function (degrees) {
-    turtle.h += degrees;
-    turtle.update_position();
+    turtle.exec(function () {
+      this.h += degrees;
+      this.update_position();
+    });
   };
 
   this.SETPOS = function (p) {
@@ -103,24 +140,32 @@
   };
 
   this.SETXY = function (x, y) {
-    turtle.x = x;
-    turtle.y = y;
-    turtle.update_position();
+    turtle.exec(function () {
+      this.x = x;
+      this.y = y;
+      this.update_position();
+    });
   };
 
   this.SETX = function (x) {
-    turtle.x = x;
-    turtle.update_position();
+    turtle.exec(function () {
+      this.x = x;
+      this.update_position();
+    });
   };
 
   this.SETY = function (y) {
-    turtle.y = y;
-    turtle.update_position();
+    turtle.exec(function () {
+      this.y = y;
+      this.update_position();
+    });
   };
 
   this.SETHEADING = this.SETH = function (h) {
-    turtle.h = h;
-    turtle.update_position();
+    turtle.exec(function () {
+      this.h = h;
+      this.update_position();
+    });
   };
 
   this.HOME = function () {
@@ -145,15 +190,21 @@
   };
 
   this.SHOWTURTLE = this.ST = function () {
-    turtle.visible = true;
+    turtle.exec(function () {
+      this.visible = true;
+    });
   };
 
   this.HIDETURTLE = this.HT = function () {
-    turtle.visible = false;
+    turtle.exec(function () {
+      this.visible = false;
+    });
   };
 
   this.CLEAN = function () {
-    V.remove_children(turtle.sheet);
+    turtle.exec(function () {
+      V.remove_children(this.sheet);
+    });
   };
 
   this.CLEARSCREEN = this.CS = function () {
@@ -166,33 +217,47 @@
   };
 
   this.PENDOWN = this.PD = function () {
-    turtle.new_path();
+    turtle.exec(function () {
+      this.new_path();
+    });
   };
 
   this.PENUP = this.PU = function () {
-    delete turtle.__path;
-    delete turtle.__points;
+    turtle.exec(function () {
+      delete turtle.__path;
+      delete turtle.__points;
+    });
   };
 
   this.SETPENCOLOR = this.SETPC = function (color) {
-    turtle.color = turtle.palette[color] || color;
+    turtle.exec(function () {
+      this.color = turtle.palette[color] || color;
+    });
   };
 
   this.SETPALETTE = function (n, color) {
-    turtle.palette[n] = color;
+    turtle.exec(function () {
+      this.palette[n] = color;
+    });
   };
 
   this.SETPENSIZE = function (n) {
-    turtle.pensize = n;
+    turtle.exec(function () {
+      this.pensize = n;
+    });
   };
 
   this.SETBACKGROUND = this.SETBG = function (color) {
-    document.querySelector("svg").style.backgroundColor =
-      turtle.palette[color] || color;
+    turtle.exec(function () {
+      document.querySelector("svg").style.backgroundColor =
+        this.palette[color] || color;
+    });
   };
 
 
   // Initialize the turtle
+  turtle.commands = [];
+  turtle.speed = 16;
   turtle.new_sheet();
   HOME();
   SHOWTURTLE();

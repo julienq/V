@@ -21,6 +21,21 @@
   var A = Array.prototype;
 
 
+  // Remove prefix from requestAnimationFrame and cancelAnimationFrame, or
+  // provide a fallback
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = (window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame || window.msRequestAnimationFrame ||
+      window.oRequestAnimationFrame || function (f) {
+        return window.setTimeout(function () {
+          f(Date.now());
+        }, 16);
+      }).bind(window);
+    window.cancelAnimationFrame = (window.webkitCancelAnimationFrame ||
+      window.mozCancelAnimationFrame || window.msCancelAnimationFrame ||
+      window.oCancelAnimationFrame || window.clearTimeout).bind(window);
+  }
+
   // Randomness
 
   // Random integer in the [min, max] range, or [0, max] if min is not given.
