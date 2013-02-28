@@ -97,6 +97,7 @@ function GARDEN() {
     SETY(V.random_int(-150, 150));
     PENDOWN();
     SETPENCOLOR(V.random_int(15));
+    SETBACKGROUND((8 + PENCOLOR()) % 16);
     PLANT(V.random_int(20, 200));
   });
 }

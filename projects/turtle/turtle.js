@@ -58,7 +58,7 @@
   turtle.new_path = function () {
     this.__path = this.sheet.appendChild(V.$path({ fill: "none",
       stroke: this.color, "stroke-width": this.pensize,
-      d: "M%0,%1".fmt(this.x, -this.y)
+      d: "M%0,%1".fmt(this.x.toFixed(2), -this.y.toFixed(2))
     }));
     this.__points = [[this.x, this.y]];
   };
@@ -76,7 +76,8 @@
       if (this.x !== p[0] || this.y !== p[1]) {
         this.__points.push([this.x, this.y]);
         this.__path.setAttribute("d",
-          this.__path.getAttribute("d") + "L%0,%1".fmt(this.x, -this.y));
+          this.__path.getAttribute("d") +
+            "L%0,%1".fmt(this.x.toFixed(2), -this.y.toFixed(2)));
       }
     }
     this.elem.setAttribute("transform", "translate(%0, %1) rotate(%2)"
@@ -121,7 +122,7 @@
   // Functions from UCB Logo
   // TODO: ARC, SCRUNCH, WRAP, WINDOW, FENCE, FILL, FILLED, LABEL,
   // SETLABELHEIGHT, SETSCRUNCH, TURTLEMODE, LABELSIZE, PENPAINT, PENERASE,
-  // SETPENPATTERN, PENMODE, PENCOLOR, PALETTE, PENSIZE, PENPATTERN,
+  // SETPENPATTERN, PENMODE, PALETTE, PENSIZE, PENPATTERN,
   // PEN, SAVEPICT, LOADPICT, MOUSEPOS, CLICKPOS, BUTTONP, BUTTON
   // Ours:
   // FOLLOW, SCALE, TOUCH*, SHEET*, UNDO, REDO
@@ -251,8 +252,16 @@
 
   this.SETPENCOLOR = this.SETPC = function (color) {
     turtle.exec(function () {
-      this.color = turtle.palette[color] || color;
+      if (this.palette[color]) {
+        this.palette_color = color;
+        color = this.palette[color];
+      }
+      this.color = color;
     });
+  };
+
+  this.PENCOLOR = function () {
+    return turtle.palette_color || turtle.color;
   };
 
   this.SETPALETTE = function (n, color) {
