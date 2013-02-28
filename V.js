@@ -73,6 +73,14 @@
     });
   };
 
+  // Convert a string with dash to camel case: remove dashes and capitalize the
+  // following letter (e.g., convert foo-bar to fooBar)
+  V.undash = function (s) {
+    return s.replace(/-+(.?)/g, function (_, p) {
+      return p.toUpperCase();
+    });
+  };
+
   // Known XML namespaces and their prefixes for use with create_element below.
   // XLink is used for href attributes with SVG elements. New namespace prefixes
   // can be added to this list and will be recognized by create_element. (For
@@ -81,6 +89,38 @@
     html: "http://www.w3.org/1999/xhtml",
     svg: "http://www.w3.org/2000/svg",
     xlink: "http://www.w3.org/1999/xlink"
+  };
+
+  // Make shorthands for known HTML, SVG and MathML elements, e.g. V.$p,
+  // V.$fontFaceFormat (for svg:font-face-format), &c.
+  V.tags = {
+    html: ["a", "abbr", "address", "area", "article", "aside", "audio", "b",
+      "base", "bdi", "bdo", "blockquote", "body", "br", "button", "canvas",
+      "caption", "cite", "code", "col", "colgroup", "command", "datalist", "dd",
+      "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed",
+      "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3",
+      "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe",
+      "img", "input", "ins", "kbd", "keygen", "label", "legend", "li", "link",
+      "map", "mark", "menu", "meta", "meter", "nav", "noscript", "object", "ol",
+      "optgroup", "option", "output", "p", "param", "pre", "progress", "q",
+      "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small",
+      "source", "span", "strong", "style", "sub", "summary", "sup", "table",
+      "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "title", "tr",
+      "tref", "track", "u", "ul", "var", "video", "wbr"],
+    svg: ["altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor",
+      "animateMotion", "animateTransform", "circle", "clipPath",
+      "color-profile", "cursor", "defs", "desc", "ellipse", "feBlend",
+      "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix",
+      "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood",
+      "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage",
+      "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight",
+      "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "filter",
+      "font", "font-face", "font-face-format", "font-face-name",
+      "font-face-src", "font-face-uri", "foreignObject", "g", "glyph",
+      "glyphRef", "hkern", "image", "line", "linearGradient", "marker", "mask",
+      "metadata", "missing-glyph", "mpath", "path", "pattern", "polygon",
+      "polyline", "radialGradient", "rect", "set", "stop", "svg", "switch",
+      "symbol", "text", "textPath", "tref", "tspan", "use", "view", "vkern"]
   };
 
   // Append a child node `ch` to `node`. If it is a string, create a text
@@ -173,55 +213,12 @@
     return elem;
   };
 
-  // Shorthand for HTML elements: the element name prefixed by a $ sign
-  // Cf. http://dev.w3.org/html5/spec/section-index.html#elements-1
-  ["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base",
-    "bdi", "bdo", "blockquote", "body", "br", "button", "canvas", "caption",
-    "cite", "code", "col", "colgroup", "command", "datalist", "dd", "del",
-    "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset",
-    "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5",
-    "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img",
-    "input", "ins", "kbd", "keygen", "label", "legend", "li", "link", "map",
-    "mark", "menu", "meta", "meter", "nav", "noscript", "object", "ol",
-    "optgroup", "option", "output", "p", "param", "pre", "progress", "q", "rp",
-    "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source",
-    "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td",
-    "textarea", "tfoot", "th", "thead", "time", "title", "tr", "tref", "track",
-    "u", "ul", "var", "video", "wbr"
-  ].forEach(function (tag) {
-    V["$" + tag] = V.create_element.bind(window.document, tag);
-  });
-
-  // SVG elements (a, script, style and title are omitted because of clashes
-  // with the HTML namespace; see below for elements with dashes)
-  // Cf. http://www.w3.org/TR/SVG/eltindex.html
-  ["altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor",
-    "animateMotion", "animateTransform", "circle", "clipPath", "cursor", "defs",
-    "desc", "ellipse", "feBlend", "feColorMatrix", "feComponentTransfer",
-    "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap",
-    "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR",
-    "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology",
-    "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile",
-    "feTurbulence", "filter", "font", "foreignObject", "g", "glyph", "glyphRef",
-    "hkern", "image", "line", "linearGradient", "marker", "mask", "metadata",
-    "mpath", "path", "pattern", "polygon", "polyline", "radialGradient", "rect",
-    "set", "stop", "svg", "switch", "symbol", "text", "textPath", "tref",
-    "tspan", "use", "view", "vkern"
-  ].forEach(function (tag) {
-    V["$" + tag] = V.create_element.bind(window.document, "svg:" + tag);
-  });
-
-  // SVG elements with a dash in their name (color-profile, font-face,
-  // font-face-format, font-face-name, font-face-src, font-face-uri, and
-  // missing-glyph) are converted to camel case, e.g. use flexo.$fontFace
-  // for "svg:font-face"
-  ["color-profile", "font-face", "font-face-format", "font-face-name",
-    "font-face-src", "font-face-uri", "missing-glyph"
-  ].forEach(function (tag) {
-    V["$" + tag.replace(/-+(.?)/g, function (_, p) {
-      return p.toUpperCase();
-    })] = V.create_element.bind(window.document, "svg:" + tag);
-  });
+  for (var ns in V.tags) {
+    V.tags[ns].forEach(function (tag) {
+      V["$" + V.undash(tag)] =
+        V.create_element.bind(this, "%0:%1".fmt(ns, tag));
+    });
+  }
 
   // Remove all children of a node
   V.remove_children = function (node) {
