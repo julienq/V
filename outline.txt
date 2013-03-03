@@ -9,14 +9,12 @@ A. Frontmatter
 
 B. Markup
 
-  Document structure
-  Coordinates
+  Document structure and coordinates
   Lines; shapes (rect, polygon, polyline, circle, ellipse); path
   Transforms, grouping and use
   Color, gradients and patterns
   Text and fonts
-  Images
-  Audio and video
+  Media (images, audio and video)
   Clipping and masks
   Filters
   Declarative animation
@@ -26,14 +24,14 @@ B. Markup
 
 C. Scripting
 
-  Our view of Javascript
-  DOM
-  Our support library (V.js)
+  An opinionated view of Javascript
+  DOM (Core, HTML, SVG)
+  A support library for this book
   Randomness
   Interactivity
   Scripted animation
   Libraries (Raphael, D3, Box2D/Bullet)
-  Other languages and frameworks (jQuery, Coffeescript, ClojureScript?, elm?)
+  Other languages/frameworks (jQuery, Coffeescript, ClojureScript?, elm?)
   Generating SVG (XSLT, &c.)
 
 
