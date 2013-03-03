@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Turtle</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="cache-control" content="no-cache">
+    <style>
+
+html {
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  position: relative;
+  background-color: black;
+}
+
+a {
+  text-decoration: none;
+  color: #ff4040;
+}
+
+.expand {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+svg {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="expand">
+      <svg viewBox="-400 -250 800 500">
+      <g stroke-linecap="round" stroke-linejoin="round" stroke="white">
+        <polygon id="turtle" points="4 4 0 -8 -4 4 0 2" fill="black"></polygon>
+      </g>
+      </svg>
+    </div>
+    <script src="../../V.js"></script>
+
+    <script>
+
+"use strict";
+
+// A stupid turtle
+var turtle = document.getElementById("turtle");
+var g = turtle.parentNode;
+
+function FORWARD(steps) {
+  g.appendChild(V.$line({ y2: -steps }));
+  g = g.appendChild(V.$g({ transform: "translate(0, -%0)".fmt(steps) }));
+  g.appendChild(turtle);
+}
+
+function RIGHT(degrees) {
+  g = g.appendChild(V.$g({ transform: "rotate(%0)".fmt(degrees) }));
+  g.appendChild(turtle);
+}
+
+for (var j = 0; j < 10; ++j) {
+  for (var i = 0; i < 4; ++i) {
+    FORWARD(100);
+    RIGHT(90);
+  }
+  RIGHT(36);
+}
+    </script>
+  </body>
+</html>
