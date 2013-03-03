@@ -15,7 +15,7 @@ var S = SZ / 2;
 var M = 32;
 var R = 2 / (W * H);
 var K_min = [0x3041, 0x30a1, 0x4e00, 0x3400];
-var K_max = [0x3045, 0x30a5, 0x9faf, 0x4dbf];
+var K_max = [0x3095, 0x30f5, 0x9faf, 0x4dbf];
 
 document.documentElement.setAttribute("viewBox", "0 0 %0 %1"
   .fmt(4 * M + W * (M + SZ), 4 * M + H * (M + SZ)));
