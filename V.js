@@ -38,6 +38,16 @@
 
   // Randomness
 
+  // Random number in the [min, max[ range, or [0, max[ if min is not given.
+  // We assume that min < max.
+  V.random = function (min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.random() * (max - min);
+  };
+
   // Random integer in the [min, max] range, or [0, max] if min is not given.
   // We asssume that min < max.
   V.random_int = function (min, max) {
