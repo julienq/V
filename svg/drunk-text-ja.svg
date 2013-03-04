@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="ja">
+  <title>酔っ払いテキスト</title>
+  <g font-family="Univers, 'Helvetica Neue', Helvetica, sans-serif"
+    text-anchor="middle" font-size="48" fill-opacity="0.85"/>
+  <script xlink:href="../V.js" type="text/javascript"/>
+  <script><![CDATA[
+
+"use strict";
+
+var W = 8;
+var H = 16;
+var SZ = 24;
+var S = SZ / 2;
+var M = 32;
+var R = 2 / (W * H);
+var K_min = [0x3041, 0x30a1, 0x4e00, 0x3400];
+var K_max = [0x3095, 0x30f5, 0x9faf, 0x4dbf];
+
+document.documentElement.setAttribute("viewBox", "0 0 %0 %1"
+  .fmt(4 * M + W * (M + SZ), 4 * M + H * (M + SZ)));
+
+var g = document.querySelector("g");
+
+for (var i = 0; i < W * H; ++i) {
+  var r = M * i * R;
+  var x = S + 2 * M + (i % W) * (SZ + M) + V.random(-r , r);
+  var y = S + 2 * M + (Math.floor(i / W)) * (SZ + M) + V.random(-r, r);
+  var c = V.random_int(K_min.length - 1);
+  var t = g.appendChild(V.$text({
+    transform: "translate(%0, %1) rotate(%2) scale(%3)"
+      .fmt(x, y, 1.8 * (V.random(-r, r)), V.random(1, 1 + r / 20))
+  }, String.fromCharCode(V.random_int(K_min[c], K_max[c]))));
+}
+
+  ]]></script>
+</svg>
+

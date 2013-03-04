@@ -36,7 +36,74 @@
       window.oCancelAnimationFrame || window.clearTimeout).bind(window);
   }
 
+  // Pad a string to the given length with the given padding (defaults to 0)
+  // if it is shorter. The padding is added at the beginning of the string.
+  V.pad = function(string, length, padding) {
+    if (typeof padding !== "string") {
+      padding = "0";
+    }
+    if (typeof string !== "string") {
+      string = string.toString();
+    }
+    var l = length + 1 - string.length;
+    return l > 0 ? (Array(l).join(padding)) + string : string;
+  };
+
+  // Make an XMLHttpRequest with optional params and a callback when done
+  V.ez_xhr = function (uri, params, f) {
+    var req = new XMLHttpRequest();
+    if (f === undefined) {
+      f = params;
+      params = {};
+    }
+    req.open(params.method || "GET", uri);
+    if (params.hasOwnProperty("responseType")) {
+      req.responseType = params.responseType;
+    }
+    if (params.hasOwnProperty("headers")) {
+      for (var h in params.headers) {
+        req.setRequestHeader(h, params.headers[h]);
+      }
+    }
+    req.onload = req.onerror = function () {
+      f(req);
+    };
+    req.send(params.data || "");
+  };
+
+  // Get arguments from an URI (e.g. ...?x=1&y=2)
+  // The first paramater is an object with default values for arguments (if
+  // any), the second argument is the argument string; if not provided, the
+  // argument string of the current URL will be used instead
+  V.get_args = function (defaults, argstr) {
+    if (argstr === undefined) {
+      argstr = typeof window === "object" &&
+        typeof window.location === "object" &&
+        typeof window.location.search === "string" ?
+            window.location.search.substring(1) : "";
+    }
+    var args = defaults || {};
+    argstr.split("&").forEach(function (q) {
+      if (!q) {
+        return;
+      }
+      var sep = q.indexOf("=");
+      args[q.substr(0, sep)] = decodeURIComponent(q.substr(sep + 1));
+    });
+    return args;
+  };
+
   // Randomness
+
+  // Random number in the [min, max[ range, or [0, max[ if min is not given.
+  // We assume that min < max.
+  V.random = function (min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.random() * (max - min);
+  };
 
   // Random integer in the [min, max] range, or [0, max] if min is not given.
   // We asssume that min < max.
