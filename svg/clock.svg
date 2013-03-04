@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-200 -200 400 400"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="n" fill="none" stroke="black" stroke-linecap="round">
+    <circle r="180"/>
+  </g>
+  <g stroke-linecap="round" stroke="black" transform="rotate(-90)">
+    <line x1="80" id="h"/>
+    <line x1="160" id="m"/>
+    <line x1="160" id="s" stroke="#ff4040"/>
+  </g>
+  <script xlink:href="../V.js"/>
+  <script><![CDATA[
+
+"use strict";
+
+var h = document.getElementById("h");
+var m = document.getElementById("m");
+var s = document.getElementById("s");
+
+var offset = (new Date()).getTimezoneOffset() / 60;
+
+function hands() {
+  var d = Date.now();
+  h.setAttribute("transform", "rotate(%0)"
+    .fmt(((d / 3600000) % 24 - offset) * 30));
+  m.setAttribute("transform", "rotate(%0)".fmt(((d / 60000) % 60) * 6));
+  s.setAttribute("transform", "rotate(%0)".fmt(((d / 1000) % 60) * 6));
+  requestAnimationFrame(hands);
+}
+
+var n = document.getElementById("n");
+for (var i = 0; i < 60; ++i) {
+  n.appendChild(V.$line({ y1: 170, y2: i % 5 === 0 ? 150 : 160,
+    transform: "rotate(%0)".fmt(i * 6) }));
+}
+
+hands();
+
+  ]]></script>
+</svg>
+
