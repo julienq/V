@@ -15,6 +15,7 @@ var S = SZ / 2;
 var M = 21;
 var R = 1.5 / (W * W * H * H);
 var text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+// var text = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
 
 document.documentElement.setAttribute("viewBox", "0 0 %0 %1"
   .fmt(4 * M + W * (M + SZ), 3 * M + H * (M + SZ)));
