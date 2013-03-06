@@ -14,7 +14,8 @@ var SZ = 24;
 var S = SZ / 2;
 var M = 21;
 var R = 1.5 / (W * W * H * H);
-var text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+var args = V.get_args({ text: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" });
 
 document.documentElement.setAttribute("viewBox", "0 0 %0 %1"
   .fmt(4 * M + W * (M + SZ), 3 * M + H * (M + SZ)));
@@ -25,11 +26,11 @@ for (var i = 0; i < W * H; ++i) {
   var r = M * i * i * R;
   var x = S + 2 * M + (i % W) * (SZ + M) + V.random(-r , r);
   var y = S + 2 * M + (Math.floor(i / W)) * (SZ + M) + V.random(-r, r);
-  var l = Math.round(i + V.random(-r, r)) % text.length;
+  var l = Math.round(i + V.random(-r, r)) % args.text.length;
   var t = g.appendChild(V.$text({
     transform: "translate(%0, %1) rotate(%2) scale(%3)"
       .fmt(x, y, 1.8 * (V.random(-r, r)), V.random(1, 1 + r / 20))
-  }, text.substr(l, 1)));
+  }, args.text.substr(l, 1)));
 }
 
   ]]></script>
