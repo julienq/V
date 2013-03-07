@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <circle cx="160" cy="480">
+    <animate attributeType="XML" attributeName="r" from="0" to="960"
+      dur="3s" fill="freeze"/>
+  </circle>
+  <circle cx="160" cy="480" fill="white">
+    <animate attributeType="XML" attributeName="r" from="0" to="960"
+      dur="5s" begin="1.5s" fill="freeze"/>
+  </circle>
+  <circle cx="160" cy="480">
+    <animate attributeType="XML" attributeName="r" from="0" to="960"
+      dur="2.5s" begin="3s" fill="freeze"/>
+  </circle>
+</svg>
+
