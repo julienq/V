@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 854 480"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="triangle">
+      <poly sides="3" r="160"/>
+    </clipPath>
+  </defs>
+  <image xlink:href="http://placekitten.com/854/480" width="854" height="480"/>
+  <image xlink:href="http://placekitten.com/320/320" width="320" height="320"
+    x="-160" y="-160" clip-path="url(#triangle)"
+    transform="translate(427, 240)"/>
+  <script xlink:href="../V.js"/>
+</svg>
+
