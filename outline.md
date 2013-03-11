@@ -35,7 +35,7 @@
 * A support library for this book (V.js)
 * Randomness
     * Examples: [drunk text](http://romulusetrem.us/vectors-galore/svg/drunk-text.svg),
-      [drunk Japanese text](http://romulusetrem.us/vectors-galore/svg/drunk-text-js.svg)
+      [drunk Japanese text](http://romulusetrem.us/vectors-galore/svg/drunk-text-ja.svg)
 * Interactivity
 * Scripted animation
 * Libraries
