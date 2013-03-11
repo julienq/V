@@ -23,10 +23,10 @@
 * Clipping and masks
 * Filters
 * Declarative animation
-    * Example: [circles](http://romulusetrem.us/vectors-galore/svg/circles.svg)
+    * Example: [circles](http://romulusetrem.us/V/svg/circles.svg)
 * SVG in HTML5 (tagsoup; XHTML)
 * CSS; animation; 3D transforms
-    * Example: [clock](http://romulusetrem.us/vectors-galore/svg/clock.svg)
+    * Example: [clock](http://romulusetrem.us/V/svg/clock.svg)
 
 ### C. Scripting
 
@@ -34,8 +34,8 @@
 * DOM (Core, HTML, SVG)
 * A support library for this book (V.js)
 * Randomness
-    * Examples: [drunk text](http://romulusetrem.us/vectors-galore/svg/drunk-text.svg),
-      [drunk Japanese text](http://romulusetrem.us/vectors-galore/svg/drunk-text-ja.svg)
+    * Examples: [drunk text](http://romulusetrem.us/V/svg/drunk-text.svg),
+      [drunk Japanese text](http://romulusetrem.us/V/svg/drunk-text-ja.svg)
 * Interactivity
 * Scripted animation
 * Libraries
@@ -53,11 +53,11 @@
 * Tiling and mapping
 * Some isometric stuff
 * Turtle graphics/Logo
-    * [Turtle project](http://romulusetrem.us/vectors-galore/projects/turtle/)
+    * [Turtle project](http://romulusetrem.us/V/projects/turtle/)
     * [Tortoise](https://github.com/julienq/tortoise): full-on logo with
       multiple backends
 * Kanji
-    * [Kanji project](http://romulusetrem.us/vectors-galore/projects/kanji/kanji.html?k=漢)
+    * [Kanji project](http://romulusetrem.us/V/projects/kanji/kanji.html?k=漢)
 * Games (Asteroids; Graviton; Memory)
 
 
