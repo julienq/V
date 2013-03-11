@@ -3,6 +3,7 @@
 
   var turtle = {
     elem: document.getElementById("turtle"),
+    pen: document.getElementById("turtle-pen"),
     palette: [
       "#000000",  //  0: black
       "#0000ff",  //  1: blue
@@ -65,7 +66,8 @@
 
   // Start a new sheet to draw on
   turtle.new_sheet = function () {
-    this.sheet = this.elem.parentNode.insertBefore(V.$g(), this.elem);
+    this.sheet = this.elem.parentNode.parentNode.insertBefore(V.$g(),
+        this.elem.parentNode);
   };
 
   // Update the position of the turtle; if the pen is down, keep drawing to the
@@ -80,12 +82,13 @@
             "L%0,%1".fmt(this.x.toFixed(2), -this.y.toFixed(2)));
       }
     }
-    this.elem.setAttribute("transform", "translate(%0, %1) rotate(%2)"
-      .fmt(this.x, -this.y, this.h));
+    this.elem.parentNode.setAttribute("transform",
+      "translate(%0, %1) rotate(%2)".fmt(this.x, -this.y, this.h));
   };
 
   V.make_property(turtle, "color", function () {
     this.elem.setAttribute("stroke", this.color);
+    this.pen.setAttribute("fill", this.color);
     if (this.__path) {
       this.new_path();
     }
@@ -99,10 +102,11 @@
 
   V.make_property(turtle, "visible", function () {
     this.elem.setAttribute("stroke-opacity", this.visible ? 1 : 0);
+    this.pen.setAttribute("fill-opacity", this.visible ? 1 : 0);
   });
 
   V.make_property(turtle, "background", function () {
-    document.querySelector("svg").style.backgroundColor =
+    document.querySelector("svg").parentNode.style.backgroundColor =
       this.palette[this.background] || this.background;
   });
 

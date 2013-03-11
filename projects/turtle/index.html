@@ -40,9 +40,18 @@ svg {
   <body>
     <div class="expand">
       <svg viewBox="-400 -250 800 500">
-        <g stroke-linecap="round" stroke-linejoin="round">
-          <polygon id="turtle" points="4 4 0 -8 -4 4 0 2"
-            fill="none"></polygon>
+        <defs>
+          <clipPath id="clip-rect">
+            <rect x="-400" y="-250" width="800" height="500"/>
+          </clipPath>
+        </defs>
+        <g stroke-linecap="round" stroke-linejoin="round"
+          clip-path="url(#clip-rect)">
+          <g>
+            <polygon id="turtle" points="8 12 0 -12 -8 12 0 8"
+              fill="none"></polygon>
+            <circle id="turtle-pen" r="2"/>
+          </g>
         </g>
       </svg>
     </div>

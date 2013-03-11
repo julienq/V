@@ -19,6 +19,12 @@ var s = document.getElementById("s");
 
 var offset = (new Date()).getTimezoneOffset() / 60;
 
+var n = document.getElementById("n");
+for (var i = 0; i < 60; ++i) {
+  n.appendChild(V.$line({ y1: 170, y2: i % 5 === 0 ? 150 : 160,
+    transform: "rotate(%0)".fmt(i * 6) }));
+}
+
 function hands() {
   var d = Date.now();
   h.setAttribute("transform", "rotate(%0)"
@@ -26,12 +32,6 @@ function hands() {
   m.setAttribute("transform", "rotate(%0)".fmt(((d / 60000) % 60) * 6));
   s.setAttribute("transform", "rotate(%0)".fmt(((d / 1000) % 60) * 6));
   requestAnimationFrame(hands);
-}
-
-var n = document.getElementById("n");
-for (var i = 0; i < 60; ++i) {
-  n.appendChild(V.$line({ y1: 170, y2: i % 5 === 0 ? 150 : 160,
-    transform: "rotate(%0)".fmt(i * 6) }));
 }
 
 hands();

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  viewBox="0 0 400 300">
-  <title>Custom poly element</title>
-  <poly x="200" y="150" r="50" sides="5" phase="90"/>
-  <script xlink:href="../V.js" type="text/javascript"/>
-</svg>
-
