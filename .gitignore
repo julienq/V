@@ -1,6 +1,5 @@
 *.swp
 .DS_Store
-projects/kanji/kanji
 test/chai.js
 test/mocha.css
 test/mocha.js
