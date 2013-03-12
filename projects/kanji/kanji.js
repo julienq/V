@@ -10,7 +10,6 @@ var Kanji = {};
 // Initialize a new kanji from an XML element containing kanji elements and
 // paths.
 Kanji.init = function (xml) {
-  this.vb = xml.documentElement.getAttribute("viewBox");
   this.paths = map.call(xml.querySelectorAll("path"), function (p) {
     return p.getAttribute("d");
   });
@@ -26,20 +25,17 @@ if (typeof args.k === "string" && args.k.length === 1) {
       var t = 0;
       var kanji = Object.create(Kanji).init(req.responseXML);
       var svg = document.querySelector("svg");
-      svg.setAttribute("viewBox", kanji.vb);
-      var mask = svg.appendChild(V.$rect({ width: svg.viewBox.baseVal.width,
-        height: svg.viewBox.baseVal.height, fill: "rgba(0,0,0,0)",
-        stroke: "none", id: "mask" }));
+      var g = svg.querySelector("g");
       kanji.paths.forEach(function (d) {
-        var p = svg.insertBefore(V.$path({ d: d, "stroke-opacity": "0" }),
-          mask);
+        g.appendChild(V.$path({ d: d }));
+        var p = svg.appendChild(V.$path({ d: d, "stroke-opacity": "0" }));
         var l = p.getTotalLength();
         p.setAttribute("stroke-dasharray", "%0,%0".fmt(l, l));
         p.appendChild(V.$animate({ attributeName: "stroke-opacity",
-          begin: "mask.click+%0s".fmt(t), from: 0, to: 1, dur: "%0s".fmt(pause),
+          begin: "%0s".fmt(t), from: 0, to: 1, dur: "%0s".fmt(pause),
           fill: "freeze" }));
         p.appendChild(V.$animate({ attributeName: "stroke-dashoffset",
-          begin: "mask.click+%0s".fmt(t), from: l, to: 0, dur: "%0s".fmt(l / speed),
+          begin: "%0s".fmt(t), from: l, to: 0, dur: "%0s".fmt(l / speed),
           fill: "freeze" }));
         t += l / speed + pause;
       });
