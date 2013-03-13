@@ -6,7 +6,7 @@
   <g stroke-linecap="round" stroke="black" transform="rotate(-90)">
     <line x1="80" id="h"/>
     <line x1="160" id="m"/>
-    <line x1="160" id="s" stroke="#ff4040"/>
+    <line x1="160" id="s" stroke-dasharray="10 10"/>
   </g>
   <script xlink:href="../V.js"/>
   <script><![CDATA[
@@ -31,6 +31,7 @@ function hands() {
     .fmt(((d / 3600000) % 24 - offset) * 30));
   m.setAttribute("transform", "rotate(%0)".fmt(((d / 60000) % 60) * 6));
   s.setAttribute("transform", "rotate(%0)".fmt(((d / 1000) % 60) * 6));
+  // s.setAttribute("stroke-dashoffset", (d / 50) % 160);
   /*
   var vb = h.parentNode.getBBox();
   h.parentNode.parentNode.setAttribute("viewBox", "%0 %1 %2 %3"
