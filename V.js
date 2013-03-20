@@ -14,11 +14,10 @@
     old_V: this.V
   };
 
-  // When we want to call array methods on array-like objects, such as strings,
-  // `arguments`, or DOM lists, we can use this shorthand for the array
-  // prototype. For instance: A.forEach.call(element.childNodes, ...) or the
-  // classic A.slice.call(arguments, ...)
-  var A = Array.prototype;
+  // Sometime we need to call Array methods on array-like objects (often DOM
+  // lists, or strings); these are useful shorthands.
+  var foreach = Array.prototype.forEach;
+  var slice = Array.prototype.slice;
 
 
   // Remove prefix from requestAnimationFrame and cancelAnimationFrame, or
@@ -91,6 +90,15 @@
       args[q.substr(0, sep)] = decodeURIComponent(q.substr(sep + 1));
     });
     return args;
+  };
+
+  // Numbers
+
+  // Return the value constrained between min and max. A NaN value is converted
+  // to 0 before being clamped. min and max are assumed to be numbers such that
+  // min <= max.
+  V.clamp = function (value, min, max) {
+    return Math.max(Math.min(isNaN(value) ? 0 : value, max), min);
   };
 
   // Randomness
@@ -227,11 +235,11 @@
       // as that would be the contents of the element, not its attributes.) If
       // that's the case, then the contents are all the other arguments passed
       // to the function
-      contents = A.slice.call(arguments, 2);
+      contents = slice.call(arguments, 2);
     } else {
       // There are no attributes so the contents are all arguments except for
       // the first one.
-      contents = A.slice.call(arguments, 1);
+      contents = slice.call(arguments, 1);
       attrs = {};
     }
     // Get the list of classes by splitting the first argument; the name will be
@@ -379,10 +387,10 @@
 
   // Replace "fake" elements with their actual counterpart (e.g. strip, poly...)
   function realize_element(name) {
-    A.forEach.call(document.querySelectorAll(name), function (elem) {
+    foreach.call(document.querySelectorAll(name), function (elem) {
       var attrs = {};
       var ns_attrs = [];
-      A.forEach.call(elem.attributes, function (a) {
+      foreach.call(elem.attributes, function (a) {
         if (a.namespaceURI) {
           ns_attrs.push(a);
         } else {

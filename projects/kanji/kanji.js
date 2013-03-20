@@ -1,7 +1,8 @@
 "use strict";
 
-var speed = 72;    // units per second
-var pause = 0.2;  // pause between strokes in seconds
+var speed = 144;   // units per second
+var op_speed = 5;
+var pause = 0.3;  // pause between strokes in seconds
 
 var map = Array.prototype.map;
 
@@ -9,35 +10,78 @@ var Kanji = {};
 
 // Initialize a new kanji from an XML element containing kanji elements and
 // paths.
-Kanji.init = function (xml) {
-  this.paths = map.call(xml.querySelectorAll("path"), function (p) {
-    return p.getAttribute("d");
+function init_kanji(xml) {
+  var k = Object.create(Kanji);
+  k.paths = map.call(xml.querySelectorAll("path"), function (path) {
+    var p = V.$path({ d: path.getAttribute("d"), "stroke-opacity": 0 });
+    p._length = p.getTotalLength();
+    p.setAttribute("stroke-dasharray", "%0,%0".fmt(p._length));
+    p.setAttribute("stroke-dashoffset", p._length);
+    return p;
   });
-  return this;
-};
+  return k;
+}
+
+var silhouette = document.getElementById("silhouette");
+var strokes = document.getElementById("strokes");
+var paused = document.querySelector(".paused");
+var kanji;
+
+function animate() {
+  var p = kanji.paths[kanji.path];
+  var dt = (Date.now() - kanji.start) / 1000;
+  if (dt > 0) {
+    var offset = p._length - speed * dt;
+    var op = V.clamp(dt * op_speed, 0, 1);
+    if (offset < 0) {
+      offset = 0;
+      op = 1;
+      ++kanji.path;
+      kanji.start = Date.now() + pause * 1000;
+    }
+    p.setAttribute("stroke-dashoffset", offset);
+    p.setAttribute("stroke-opacity", op);
+  }
+  if (!kanji.paused && kanji.path < kanji.paths.length) {
+    kanji.frame = requestAnimationFrame(animate);
+  }
+}
+
+document.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (kanji.paused) {
+    paused.classList.add("hidden");
+    kanji.start = Date.now() + kanji.paused;
+    delete kanji.paused;
+    animate();
+  } else if (kanji.path < kanji.paths.length) {
+    paused.classList.remove("hidden");
+    kanji.paused = kanji.start - Date.now();
+    if (kanji.frame) {
+      cancelAnimationFrame(kanji.frame);
+    }
+  } else {
+    kanji.start = Date.now();
+    kanji.path = 0;
+    kanji.paths.forEach(function (p) {
+      p.setAttribute("stroke-opacity", 0);
+    });
+    animate();
+  }
+}, false);
 
 // Get a kanji from the URL k argument and display it
 var args = V.get_args();
 if (typeof args.k === "string" && args.k.length === 1) {
   var code = V.pad(args.k.charCodeAt(0).toString(16), 5);
-  V.ez_xhr("kanji/%0.svg".fmt(code), function (req) {
+  V.ez_xhr("files/kanji/%0.svg".fmt(code), function (req) {
     if (req.readyState === 4 && (req.status === 0 || req.status === 200)) {
-      var t = 0;
-      var kanji = Object.create(Kanji).init(req.responseXML);
-      var svg = document.querySelector("svg");
-      var g = svg.querySelector("g");
-      kanji.paths.forEach(function (d) {
-        g.appendChild(V.$path({ d: d }));
-        var p = svg.appendChild(V.$path({ d: d, "stroke-opacity": "0" }));
-        var l = p.getTotalLength();
-        p.setAttribute("stroke-dasharray", "%0,%0".fmt(l, l));
-        p.appendChild(V.$animate({ attributeName: "stroke-opacity",
-          begin: "%0s".fmt(t), from: 0, to: 1, dur: "%0s".fmt(pause),
-          fill: "freeze" }));
-        p.appendChild(V.$animate({ attributeName: "stroke-dashoffset",
-          begin: "%0s".fmt(t), from: l, to: 0, dur: "%0s".fmt(l / speed),
-          fill: "freeze" }));
-        t += l / speed + pause;
+      kanji = init_kanji(req.responseXML);
+      V.remove_children(silhouette);
+      V.remove_children(strokes);
+      kanji.paths.forEach(function (p) {
+        silhouette.appendChild(V.$path({ d: p.getAttribute("d") }));
+        strokes.appendChild(p);
       });
     }
   });
