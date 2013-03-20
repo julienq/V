@@ -74,7 +74,7 @@ document.addEventListener("click", function (e) {
 var args = V.get_args();
 if (typeof args.k === "string" && args.k.length === 1) {
   var code = V.pad(args.k.charCodeAt(0).toString(16), 5);
-  V.ez_xhr("files/kanji/%0.svg".fmt(code), function (req) {
+  V.ez_xhr("kanji/%0.svg".fmt(code), function (req) {
     if (req.readyState === 4 && (req.status === 0 || req.status === 200)) {
       kanji = init_kanji(req.responseXML);
       V.remove_children(silhouette);
