@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-200 -200 400 400"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+  xmlns:xlink="http://www.w3.org/1999/xlink" stroke-opacity="0">
   <g id="n" fill="white" stroke="black" stroke-linecap="round">
     <circle r="180"/>
   </g>
   <g stroke-linecap="round" stroke="black" transform="rotate(-90)">
     <line x1="80" id="h"/>
     <line x1="160" id="m"/>
-    <line x1="160" id="s" stroke="#ff4040"/>
+    <line x1="160" id="s" stroke-dasharray="10 10"/>
   </g>
   <script xlink:href="../V.js"/>
   <script><![CDATA[
@@ -35,6 +35,7 @@ function hands() {
 }
 
 hands();
+document.documentElement.removeAttribute("stroke-opacity");
 
   ]]></script>
 </svg>
