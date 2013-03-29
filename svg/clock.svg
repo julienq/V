@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-200 -200 400 400"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+  xmlns:xlink="http://www.w3.org/1999/xlink" stroke-opacity="0">
   <g id="n" fill="white" stroke="black" stroke-linecap="round">
     <circle r="180"/>
   </g>
@@ -31,16 +31,11 @@ function hands() {
     .fmt(((d / 3600000) % 24 - offset) * 30));
   m.setAttribute("transform", "rotate(%0)".fmt(((d / 60000) % 60) * 6));
   s.setAttribute("transform", "rotate(%0)".fmt(((d / 1000) % 60) * 6));
-  // s.setAttribute("stroke-dashoffset", (d / 50) % 160);
-  /*
-  var vb = h.parentNode.getBBox();
-  h.parentNode.parentNode.setAttribute("viewBox", "%0 %1 %2 %3"
-    .fmt(vb.y - 40, - vb.x - vb.width - 40, vb.height + 80, vb.width + 80));
-    */
   requestAnimationFrame(hands);
 }
 
 hands();
+document.documentElement.removeAttribute("stroke-opacity");
 
   ]]></script>
 </svg>
