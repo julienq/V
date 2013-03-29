@@ -70,19 +70,23 @@ document.addEventListener("click", function (e) {
   }
 }, false);
 
+function get_kanji(response) {
+  var parser = new DOMParser();
+  var svg = window.atob(response.data.content.replace(/\s/g, ""));
+  kanji = init_kanji(parser.parseFromString(svg, "application/xml"));
+  V.remove_children(silhouette);
+  V.remove_children(strokes);
+  kanji.paths.forEach(function (p) {
+    silhouette.appendChild(V.$path({ d: p.getAttribute("d") }));
+    strokes.appendChild(p);
+  });
+}
+
+var URL = "https://api.github.com/repos/KanjiVG/kanjivg/contents/kanji/%0.svg?callback=get_kanji";
+
 // Get a kanji from the URL k argument and display it
 var args = V.get_args();
 if (typeof args.k === "string" && args.k.length === 1) {
   var code = V.pad(args.k.charCodeAt(0).toString(16), 5);
-  V.ez_xhr("files/kanji/%0.svg".fmt(code), function (req) {
-    if (req.readyState === 4 && (req.status === 0 || req.status === 200)) {
-      kanji = init_kanji(req.responseXML);
-      V.remove_children(silhouette);
-      V.remove_children(strokes);
-      kanji.paths.forEach(function (p) {
-        silhouette.appendChild(V.$path({ d: p.getAttribute("d") }));
-        strokes.appendChild(p);
-      });
-    }
-  });
+  window.document.body.appendChild(V.$script({ src: URL.fmt(code) }));
 }
